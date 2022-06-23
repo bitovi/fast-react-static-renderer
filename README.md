@@ -36,4 +36,10 @@ At the end you should have an AWS access key and a secret access key
 
 ## Set up Contentful
 - [Sign up](https://www.contentful.com/sign-up/)
+- Get Credentials:
+  - Go to settings > API keys
+  - Click on Add API key
+  - Copy the `Space ID` and the `Content Delivery API - access token`, you will need those later to connect the NextJS app to Contentful
+- Enter your data into Contentful
 
+## Configure the operations repo
