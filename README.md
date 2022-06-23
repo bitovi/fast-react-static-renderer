@@ -8,7 +8,7 @@
 
 ## Introduction
 
-This project consists of 4 repositories.
+This project consists of 3 repositories.
 
 - [fast-react-static-renderer-app](https://github.com/bitovi/fast-react-static-renderer-app) \
   A Next.js ecommerce app connected with Contentful
@@ -19,20 +19,33 @@ This project consists of 4 repositories.
 - [fast-react-static-renderer-build-image](https://github.com/bitovi/fast-react-static-renderer-build-image) \
   The docker image to run the builds
 
-- [fast-react-static-renderer-catalog](https://github.com/bitovi/fast-react-static-renderer-catalog) \
-  A catalog of all products
-
 
 Follow the guide below to setup the project.
 
 ## Set up AWS account
 
 
-Sign up for an AWS account and get programmatic credentials
-- [Sign up](https://portal.aws.amazon.com/billing/signup#/start/email)
-- [Get Credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html)
+[Sign up](https://portal.aws.amazon.com/billing/signup#/start/email) for an AWS account and get programmatic credentials
 
-At the end you should have an AWS access key and a secret access key
+### Get credentials
+
+The account you create when you first sign up is called the `Root user`. It is not recommended using that for day to day activities. Instead, you should create a new user.
+
+To do that: 
+- sign in to the AWS console and navigate to the IAM service.
+
+- Under Access management click on Users and when on the Users page press the Add users button.
+
+- Give the user a name and select the `Access key - Programmatic access` checkbox.
+In the next page, give the user the necessary permissions and then complete the user creation.
+
+At the end you will be able to download the user's credentials which we will need later:
+
+`Access Key ID` and `Secret access key`
+
+Make sure to store and protect these values, the secret access key cannot be retrieved again.
+
+
 
 ## Set up Contentful
 - [Sign up](https://www.contentful.com/sign-up/)
@@ -42,4 +55,19 @@ At the end you should have an AWS access key and a secret access key
   - Copy the `Space ID` and the `Content Delivery API - access token`, you will need those later to connect the NextJS app to Contentful
 - Enter your data into Contentful
 
-## Configure the operations repo
+## Configure the operations repository
+
+The operation repo is in charge of setting up the infrastructure and deploying our app. Everything is in place, all we need to do is plug in our credentials.
+
+- Clone or fork the [operation repository](https://github.com/bitovi/fast-react-static-renderer-operations)
+- Add your AWS credentials to the Github actions secrets
+  - Click on the Settings in your operations repo
+  - In the left panel, click on Secrets and then Actions
+  - Press on the New repository secret button
+  - In the name field, put `AWS_ACCESS_KEY_ID` and inside the value, the access key id you had from earlier
+  - Similarly, the second secret is named `AWS_SECRET_ACCESS_KEY` with the corresponding value.
+
+    More info about Gihub secrets [here](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+
+
+
