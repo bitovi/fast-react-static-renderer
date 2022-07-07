@@ -1,3 +1,13 @@
+# Get in touch with Bitovi
+## Bitovi is an end-to-end app delivery consultancy that believes strongly in contributing to open source. We're always interested in feedback on our projects. Here are a few ways to reach out:
+<br />
+
+Want to chat about open source with us? [Join our community Slack.](https://www.bitovi.com/community/slack)
+
+Want updates on our new open source projects?  [Follow us on Twitter.](https://twitter.com/bitovi)
+
+Need help? [Set up a free consultation.](https://www.bitovi.com/frontend-javascript-consulting/react-consulting)
+
 <div align="center">
   <h1>Fast React Static Renderer</h1>
   <strong>A framework to build scalable and fast ecommerce platforms with thousands of products.</strong>
@@ -169,8 +179,8 @@ We use terraform to create and provision AWS resources. To use this for your pro
        8.  `cloudfront_distribution_id` - ID of the CloudFront distribution created by global-tools (can be found in the terraform output).
 
 
+# We want to hear from you.
 
+Come chat with us about open source in our community [Slack](https://www.bitovi.com/community/slack).
 
-
-
-
+See what we're up to by following us on [Twitter](https://twitter.com/bitovi).
