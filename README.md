@@ -89,83 +89,84 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
   - A. Update `global-tools` to deploy resources that are shared across environments.
   
-    i. Navigate to the GitHub Action for this environment at .github/workflows/deploy-global-tools.yaml and update the following values
+    1. Navigate to the GitHub Action for this environment at .github/workflows/deploy-global-tools.yaml and update the following values
 
-      1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
+       1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
 
-      2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `global-tools`
+       2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `global-tools`
 
-    ii. Navigate to the Terraform backend configuration at global-tools/terraform/backend.tf and update the following value
+    2. Navigate to the Terraform backend configuration at global-tools/terraform/backend.tf and update the following value
+   
+       1. `backend.s3.region` - AWS Region where your resources will be deployed 
+       1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
 
-      1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
+            This needs to match TF_STATE_BUCKET from above (refer to i.2.)
 
-         This needs to match TF_STATE_BUCKET from above (refer to i.2.)
+    3. Navigate to the Terraform variables at global-tools/terraform/variables.tf and update the following default values.
 
-    iii. Navigate to the Terraform variables at global-tools/terraform/variables.tf and update the following default values.
+       1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
 
-    1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
-
-    2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
 
 
   - B. Update `dev` to deploy resources that will be used for the Development environment.
 
-    i. Navigate to the GitHub Action for this environment at .github/workflows/deploy-dev.yaml and update the following values
+    1. Navigate to the GitHub Action for this environment at .github/workflows/deploy-dev.yaml and update the following values
 
-    1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
+       1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
 
-    2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `dev`
+       2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `dev`
 
-    ii. Navigate to the Terraform backend configuration at dev/terraform/backend.tf and update the following value
+    2. Navigate to the Terraform backend configuration at dev/terraform/backend.tf and update the following value
 
-    1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
+       1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
 
-        This needs to match TF_STATE_BUCKET from above (refer to i.2.)
+            This needs to match TF_STATE_BUCKET from above (refer to i.2.)
 
-    iii. Navigate to the Terraform variables at dev/terraform/variables.tf and update the following default values.
+    3. Navigate to the Terraform variables at dev/terraform/variables.tf and update the following default values.
 
-    1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
+       1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
 
-    2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
-    3. `subdomain_name` - sub-domain that will be used to serve the site [default: dev.fast-react-static-renderer.com ]
+       3. `subdomain_name` - sub-domain that will be used to serve the site [default: dev.fast-react-static-renderer.com ]
 
-    4. `hosted_zone_id` - ID of the hosted zone created by global-tools (can be found in the terraform output)
+       4. `hosted_zone_id` - ID of the hosted zone created by global-tools (can be found in the terraform output)
 
 
 
   - C. Update `build-dev` which triggers the build and deploy process for the `dev` environment.
 
-    i. Navigate to the GitHub Action for this environment at .github/workflows/deploy-build-dev.yaml and update the following values
+    1. Navigate to the GitHub Action for this environment at .github/workflows/deploy-build-dev.yaml and update the following values
 
-    1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
+       1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
 
-    2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `build-dev`
+       2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `build-dev`
 
-    ii. Navigate to the Terraform backend configuration at build-dev/terraform/backend.tf and update the following value
+    2. Navigate to the Terraform backend configuration at build-dev/terraform/backend.tf and update the following value
 
-    1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
+       1. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
 
-        This needs to match TF_STATE_BUCKET from above (refer to i.2.)
+            This needs to match TF_STATE_BUCKET from above (refer to i.2.)
 
-    iii. Navigate to the Terraform variables at build-dev/terraform/terraform.tfvars and update the following default values.
+    3. Navigate to the Terraform variables at build-dev/terraform/terraform.tfvars and update the following default values.
 
-    1. `secret_arn_contentful_access_token` - ARN of the AWS Secret Manager Secret created earlier.
+       1. `secret_arn_contentful_access_token` - ARN of the AWS Secret Manager Secret created earlier.
 
-    2. `secret_arn_contentful_space_id` - ARN of the AWS Secret Manager Secret created earlier.
+       2. `secret_arn_contentful_space_id` - ARN of the AWS Secret Manager Secret created earlier.
 
-    3. `aws_region` - AWS Region where your resources will be deployed.
+       3. `aws_region` - AWS Region where your resources will be deployed.
 
-    4. `availability_zones` - Availability zones within the AWS region specified above where ECS can deploy containers.
+       4. `availability_zones` - Availability zones within the AWS region specified above where ECS can deploy containers.
 
-    5. `image_registry_url` - URL for Fast React Static Renderer Build Image.
+       5. `image_registry_url` - URL for Fast React Static Renderer Build Image.
 
-    6. `s3_bucket_contents` - Bucket that stores the app artifacts (refer to A.iii.1.)
+       6. `s3_bucket_contents` - Bucket that stores the app artifacts (refer to A.iii.1.)
    
-    7. `publish_s3_bucket` - Bucket for static hosting (refer to B.iii.1.).
+       7. `publish_s3_bucket` - Bucket for static hosting (refer to B.iii.1.).
 
-    8. `cloudfront_distribution_id` - ID of the CloudFront distribution created by global-tools (can be found in the terraform output).
+       8.  `cloudfront_distribution_id` - ID of the CloudFront distribution created by global-tools (can be found in the terraform output).
 
 
 
