@@ -24,7 +24,6 @@ Follow the guide below to setup the project.
 
 ## Prerequisites
 
-valid domain name
 
 ### Set up AWS account
 
