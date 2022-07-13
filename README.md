@@ -12,18 +12,25 @@ This project consists of 3 repositories.
 
 - [fast-react-static-renderer-app](https://github.com/bitovi/fast-react-static-renderer-app) \
   A Next.js ecommerce app connected with Contentful
-  
+
 - [fast-react-static-renderer-operations](https://github.com/bitovi/fast-react-static-renderer-operations) \
   Infrastructure as code with Terraform in charge of deploying the app
 
 - [fast-react-static-renderer-build-image](https://github.com/bitovi/fast-react-static-renderer-build-image) \
   The docker image to run the builds
 
-
 Follow the guide below to setup the project.
 
-## Prerequisites
+## Need help or have questions?
 
+This project is supported by [Bitovi, a React consultancy](https://www.bitovi.com/frontend-javascript-consulting/react-consulting). You can get help or ask questions on our:
+
+- [Slack Community](https://www.bitovi.com/community/slack)
+- [Twitter](https://twitter.com/bitovi)
+
+Or, you can hire us for training, consulting, or development. [Set up a free consultation.](https://www.bitovi.com/frontend-javascript-consulting/react-consulting)
+
+## Prerequisites
 
 ### Set up AWS account
 
@@ -33,7 +40,7 @@ Follow the guide below to setup the project.
 
 The account you create when you first sign up is called the `Root user`. It is not recommended using that for day to day activities. Instead, you should create a new user.
 
-To do that: 
+To do that:
 - sign in to the AWS console and navigate to the IAM service.
 
 - Under Access management click on Users and when on the Users page press the Add users button.
@@ -46,8 +53,6 @@ At the end you will be able to download the user's credentials which we will nee
 `Access Key ID` and `Secret access key`
 
 Make sure to store and protect these values, the secret access key cannot be retrieved again.
-
-
 
 ### Set up Contentful
 - [Sign up](https://www.contentful.com/sign-up/)
@@ -88,13 +93,12 @@ First, add your credentials:
 
     More info about Gihub secrets [here](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
 
-Notice that the project is divided into multiple folders. `build-dev`, `dev` and `global-tools` correspond to different environments that we configure with terraform. The `.github/workflow` contains github actions that we use to deploy each environment. 
+Notice that the project is divided into multiple folders. `build-dev`, `dev` and `global-tools` correspond to different environments that we configure with terraform. The `.github/workflow` contains github actions that we use to deploy each environment.
 
 We use terraform to create and provision AWS resources. To use this for your project, you need to change the resources names to what you need. Here's a list of every variable that needs to be changed. We repeat the same process for each environment folder, starting with `global-tools` and one folder at a time:
 
-
   - A. Update `global-tools` to deploy resources that are shared across environments.
-  
+
     1. Navigate to the GitHub Action for this environment at .github/workflows/deploy-global-tools.yaml and update the following values
 
        1. `AWS_DEFAULT_REGION` - AWS Region where your resources will be deployed
@@ -102,8 +106,8 @@ We use terraform to create and provision AWS resources. To use this for your pro
        2. `TF_STATE_BUCKET` - This bucket is used to store Terraform state for `global-tools`
 
     2. Navigate to the Terraform backend configuration at global-tools/terraform/backend.tf and update the following value
-   
-       1. `backend.s3.region` - AWS Region where your resources will be deployed 
+
+       1. `backend.s3.region` - AWS Region where your resources will be deployed
        2. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
 
             This needs to match TF_STATE_BUCKET from above (refer to i.b.)
@@ -114,8 +118,7 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
        2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
-       3. `hosting_bucket_name` - Used to store the statically generated files from the build 
-
+       3. `hosting_bucket_name` - Used to store the statically generated files from the build
 
   - B. Update `dev` to deploy resources that will be used for the Development environment.
 
@@ -127,7 +130,7 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
     2. Navigate to the Terraform backend configuration at dev/terraform/backend.tf and update the following value
 
-       1. `backend.s3.region` - AWS Region where your resources will be deployed 
+       1. `backend.s3.region` - AWS Region where your resources will be deployed
        2. `backend.s3.bucket` - This bucket is used to store the Terraform state for global tools
 
             This needs to match TF_STATE_BUCKET from above (refer to i.b.)
@@ -139,13 +142,12 @@ We use terraform to create and provision AWS resources. To use this for your pro
        2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
        3. `subdomain_name` - sub-domain that will be used to serve the site [default: dev.fast-react-static-renderer.com ]
-       
+
        4. `catalog_domain_name` - sub-domain that will be used to serve the catalog (must be same level as sub-domain) [default: catalog-dev.fast-react-static-renderer.com ]
 
        5. `hosted_zone_id` - ID of the hosted zone created by global-tools (can be found in the AWS console. Navigate to Route 53 - hosted zones and copy the hosted zone ID )
 
     4. Change `aws.region` in `dev/tarraform/us-east-1`
-
 
   - C. Update `build-dev` which triggers the build and deploy process for the `dev` environment.
 
@@ -174,21 +176,20 @@ We use terraform to create and provision AWS resources. To use this for your pro
        5. `image_registry_url` - URL for Fast React Static Renderer Build Image.
 
        6. `s3_bucket_contents` - Bucket that stores the app artifacts (refer to A.iii.1.)
-   
+
        7. `publish_s3_bucket` - Bucket for static hosting (refer to B.iii.1.).
 
        8.  `cloudfront_distribution_id` - ID of the CloudFront distribution created by global-tools (can be found in the AWS console. Navigate to the Cloudfront service - click on distributions - copy the ID for dev).
-   
-       9.  `catalog_url` - Catalog URL, (refer to B.iii.4) 
+
+       9.  `catalog_url` - Catalog URL, (refer to B.iii.4)
 
     4. Change region if needed in `provider.tf`
-   
+
 - D. Update the `deploy-build-dev-trigger.yaml` workflow file in `.github/workflows/deploy-build-dev-trigger.yaml` by changing the following values.
     - `AWS_DEFAULT_REGION`
     - `TF_STATE_BUCKET`: should be the same as in B.i.2
 
 - E. (Optional) Change the repository name tags in `iam-ci-user.tf`, `route53-zone.tf` and `s3-packages.tf`
-
 
 ## Configure pages catalog
 
@@ -204,7 +205,7 @@ We need a record of the app's pages so the we can parallelize the build process.
             "slug": "about"
         }
     ]
-} 
+}
 ````
 
 After creating the JSON file, we need to upload it to our bucket.
@@ -212,7 +213,6 @@ After creating the JSON file, we need to upload it to our bucket.
 - Navigate to your sites-dev S3 bucket (created in step B.iii.1)
 - Create a new folder called `catalog` and inside it another one called `latest`
 - Upload `pages.json`
-
 
 ## Configure React App
 
@@ -224,6 +224,4 @@ After creating the JSON file, we need to upload it to our bucket.
   - Change `aws-region` if needed
   - Put your artifacts s3 bucket name in `PUBLISH_CONTENTS_S3_BUCKET`
 
-After commiting these changes, the `publish and deploy` worklow will be triggered in the react app and that will trigger the `Deploy build-dev` workflow in the operations repo.
-That will take care of building and deploying your App.
-After a few minutes, navigate to your domain name. Your app should be live!.
+After commiting these changes, the `publish and deploy` worklow will be triggered in the react app and that will trigger the `Deploy build-dev` workflow in the operations repo. That will take care of building and deploying your App. After a few minutes, navigate to your domain name. Your app should be live!.
