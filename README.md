@@ -108,9 +108,9 @@ The operation repo is in charge of setting up the infrastructure and deploying o
 
 **IMPORTANT** If you chose to move forward without a custom domain name, you need to do the following before you start:
 
-- Navigate to the GitHub Action for global tools at .github/workflows/deploy-global-tools.yaml and **remove** the line starting with `TFVARS_AUTO_JSON`
+- Navigate to the GitHub Action for global tools at `.github/workflows/deploy-global-tools.yaml` and **remove** the line starting with `TFVARS_AUTO_JSON`
 
-- Remove the same line for the dev GitHub Action at .github/workflows/deploy-dev.yaml
+- Remove the same line for the dev GitHub Action at `.github/workflows/deploy-dev.yaml`
 
 ### General Setup
 
@@ -139,7 +139,7 @@ We repeat the same process for each environment folder, starting with `global-to
 
        1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
 
-       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` (Optional - if you have a domain name) - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
        3. `hosting_bucket_name` - Used to store the statically generated files from the build
 
@@ -162,11 +162,11 @@ We repeat the same process for each environment folder, starting with `global-to
 
        1. `bucket_name` - Used to store the statically generated files from the build (same as A.iii.3)
 
-       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` (Optional - if you have a domain name) - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
-       3. `subdomain_name` - Domain name for CloudFront, will be the primary domain for end users to access the application. [default: dev.fast-react-static-renderer.com ]
+       3. `subdomain_name` (Optional - if you have a domain name) - Domain name for CloudFront, will be the primary domain for end users to access the application. [default: dev.fast-react-static-renderer.com ]
 
-       4. `hosted_zone_id` - ID of the hosted zone created by global-tools (can be found in the AWS console. Navigate to Route 53 - hosted zones and copy the hosted zone ID )
+       4. `hosted_zone_id` (Optional - if you have a domain name) - ID of the hosted zone created by global-tools (can be found in the AWS console. Navigate to Route 53 - hosted zones and copy the hosted zone ID )
 
     4. Change `aws.region` in `dev/tarraform/us-east-1`
 
