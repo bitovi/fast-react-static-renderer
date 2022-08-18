@@ -1,6 +1,6 @@
 <div align="center">
   <h1>Fast React Static Renderer</h1>
-  <strong>A framework to build scalable and fast ecommerce platforms with thousands of products.</strong>
+  <strong>A framework to build scalable and fast ecommerce platforms with thousands of pages.</strong>
 </div>
 
 <br />
@@ -34,14 +34,14 @@ Or, you can hire us for training, consulting, or development. [Set up a free con
 
 ### Set up AWS account
 
-[Sign up for an account](https://portal.aws.amazon.com/billing/signup#/start/email) for an AWS account and get programmatic credentials
+[Sign up for an AWS account](https://portal.aws.amazon.com/billing/signup#/start/email) and get programmatic credentials
 
 #### Get credentials
 
-The account you create when you first sign up is called the `Root user`. It is not recommended using that for day to day activities. Instead, you should create a new user.
+The account you create when you first sign up is called the `Root user`. It is not recommended to use that for day to day activities. Instead, you should create a new user.
 
 To do that:
-- sign in to the AWS console and navigate to the IAM service.
+- Sign in to the AWS console and navigate to the IAM service.
 
 - Under Access management click on Users and when on the Users page press the Add users button.
 
@@ -62,15 +62,26 @@ Make sure to store and protect these values, the secret access key cannot be ret
   - Copy the `Space ID` and the `Content Delivery API - access token`, you will need those later to connect the NextJS app to Contentful
 - Enter your data into Contentful
 
-### Have a valid domain name
+### (Optional) Have a valid domain name
 
-You need to have a certified domain name to be able to deploy the app.
+If you want the application deployed with a custom domain name, you should have a certified domain name before the next steps.
+
+If you don't have a domain name, please ignore the following variables in the guide:
+- `domain_name`
+- `subdomain_name`
+- `hosted_zone_id`
+
+And make sure to follow the [No Custom domain setup](#no-custom-domain-setup) step below.
+
+
+
+**Once you have the all prerequisites, you are ready to start the guide.**
 
 ## Add Contentful Keys to AWS Secrets
 
 - Open the [Secrets Manager Console](https://us-east-1.console.aws.amazon.com/secretsmanager/landing?region=us-east-1)
-- Click on Store a new secret
-- For secret type, choose Other type of secret
+- Click on `Store a new secret`
+- For secret type, choose `Other type of secret`
 - Enter the key/value pairs corresponding to your API keys
   - ContentfulAccessToken
   - ContentfulSpaceID
@@ -81,7 +92,7 @@ You need to have a certified domain name to be able to deploy the app.
 
 The operation repo is in charge of setting up the infrastructure and deploying our app. Everything is in place, we just need to plug in our credentials and change some variables.
 
-First, add your credentials:
+### Add your credentials:
 
 - Clone or fork the [operation repository](https://github.com/bitovi/fast-react-static-renderer-operations)
 - Add your AWS credentials to the Github actions secrets
@@ -91,11 +102,23 @@ First, add your credentials:
   - In the name field, put `AWS_ACCESS_KEY_ID` and inside the value, the access key id you had from earlier
   - Similarly, the second secret is named `AWS_SECRET_ACCESS_KEY` with the corresponding value.
 
-    More info about Gihub secrets [here](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+    More info about Gihub secrets [in the github documentation](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
+
+### No Custom domain setup:
+
+**IMPORTANT** If you chose to move forward without a custom domain name, you need to do the following before you start:
+
+- Navigate to the GitHub Action for global tools at `.github/workflows/deploy-global-tools.yaml` and **remove** the line starting with `TFVARS_AUTO_JSON`
+
+- Remove the same line for the dev GitHub Action at `.github/workflows/deploy-dev.yaml`
+
+### General Setup
 
 Notice that the project is divided into multiple folders. `build-dev`, `dev` and `global-tools` correspond to different environments that we configure with terraform. The `.github/workflow` contains github actions that we use to deploy each environment.
 
-We use terraform to create and provision AWS resources. To use this for your project, you need to change the resources names to what you need. Here's a list of every variable that needs to be changed. We repeat the same process for each environment folder, starting with `global-tools` and one folder at a time:
+We use terraform to create and provision AWS resources. To use this for your project, you need to change the resources names to what you need. Below is a comprehensive list of every variable that needs to be changed. You can refer to the existing values to get an indication of what you can name your variables.
+
+We repeat the same process for each environment folder, starting with `global-tools` and one folder at a time:
 
   - A. Update `global-tools` to deploy resources that are shared across environments.
 
@@ -116,7 +139,7 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
        1. `bucket_name` - Used to store the app source in a zipped archive to use during the build process
 
-       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` (Optional - if you have a domain name) - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
        3. `hosting_bucket_name` - Used to store the statically generated files from the build
 
@@ -139,13 +162,11 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
        1. `bucket_name` - Used to store the statically generated files from the build (same as A.iii.3)
 
-       2. `domain_name` - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
+       2. `domain_name` (Optional - if you have a domain name) - Apex (root) domain name that will be used for DNS [default: fast-react-static-renderer.com ]
 
-       3. `subdomain_name` - sub-domain that will be used to serve the site [default: dev.fast-react-static-renderer.com ]
+       3. `subdomain_name` (Optional - if you have a domain name) - Domain name for CloudFront, will be the primary domain for end users to access the application. [default: dev.fast-react-static-renderer.com ]
 
-       4. `catalog_domain_name` - sub-domain that will be used to serve the catalog (must be same level as sub-domain) [default: catalog-dev.fast-react-static-renderer.com ]
-
-       5. `hosted_zone_id` - ID of the hosted zone created by global-tools (can be found in the AWS console. Navigate to Route 53 - hosted zones and copy the hosted zone ID )
+       4. `hosted_zone_id` (Optional - if you have a domain name) - ID of the hosted zone created by global-tools (can be found in the AWS console. Navigate to Route 53 - hosted zones and copy the hosted zone ID )
 
     4. Change `aws.region` in `dev/tarraform/us-east-1`
 
@@ -181,8 +202,6 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
        8.  `cloudfront_distribution_id` - ID of the CloudFront distribution created by global-tools (can be found in the AWS console. Navigate to the Cloudfront service - click on distributions - copy the ID for dev).
 
-       9.  `catalog_url` - Catalog URL, (refer to B.iii.4)
-
     4. Change region if needed in `provider.tf`
 
 - D. Update the `deploy-build-dev-trigger.yaml` workflow file in `.github/workflows/deploy-build-dev-trigger.yaml` by changing the following values.
@@ -191,28 +210,6 @@ We use terraform to create and provision AWS resources. To use this for your pro
 
 - E. (Optional) Change the repository name tags in `iam-ci-user.tf`, `route53-zone.tf` and `s3-packages.tf`
 
-## Configure pages catalog
-
-We need a record of the app's pages so the we can parallelize the build process. We store them in a JSON file called `pages.json` with the following format.
-
-````
-{
-    "pages": [
-        {
-            "slug": "home"
-        },
-        {
-            "slug": "about"
-        }
-    ]
-}
-````
-
-After creating the JSON file, we need to upload it to our bucket.
-
-- Navigate to your sites-dev S3 bucket (created in step B.iii.1)
-- Create a new folder called `catalog` and inside it another one called `latest`
-- Upload `pages.json`
 
 ## Configure React App
 
